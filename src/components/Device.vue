@@ -1,6 +1,12 @@
 <template>
 
-  <v-card>
+  <v-card
+    class="my-4 lighten-4"
+    :class="{
+      'red': device.state === 'on',
+      'grey': device.state === 'disconnected'
+      }"
+    >
 
     <v-card-title>{{device.name}}</v-card-title>
     <v-card-text>State: {{device.state}}</v-card-text>
@@ -52,7 +58,10 @@
       },
       command_topic(){
         return `/${this.username}/${this.device.name}/command`
-      }
+      },
+      status_topic(){
+        return `/${this.username}/${this.device.name}/status`
+      },
     }
 
   }
