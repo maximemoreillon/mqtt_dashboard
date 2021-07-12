@@ -5,6 +5,7 @@
     <v-card-text>
       <p>Authors: Maxime MOREILLON</p>
       <v-data-table
+        disable-sort
         hide-default-footer
         :itemsPerPage="-1"
         :headers="headers"

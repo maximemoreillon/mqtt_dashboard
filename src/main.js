@@ -8,12 +8,8 @@ import VueCookies from 'vue-cookies'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
 
-// const MQTT_BROKER_URL = process.env.VUE_APP_MQTT_BROKER_URL
-const mqtt_options = {
-  username: '',
-  password: '',
-}
-Vue.use(VueMqtt, 'wss://mqtt.iot.maximemoreillon.com', mqtt_options);
+const mqtt_options = { username: '', password: ''}
+Vue.use(VueMqtt, process.env.VUE_APP_MQTT_BROKER_URL, mqtt_options);
 Vue.use(VueAxios, axios)
 Vue.use(VueCookies)
 
