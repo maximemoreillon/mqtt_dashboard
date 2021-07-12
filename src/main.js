@@ -5,15 +5,18 @@ import store from './store'
 import vuetify from './plugins/vuetify'
 import VueMqtt from 'vue-mqtt'
 import VueCookies from 'vue-cookies'
-import './registerServiceWorker'
+import axios from 'axios'
+import VueAxios from 'vue-axios'
 
+// const MQTT_BROKER_URL = process.env.VUE_APP_MQTT_BROKER_URL
 const mqtt_options = {
   username: '',
   password: '',
 }
 Vue.use(VueMqtt, 'wss://mqtt.iot.maximemoreillon.com', mqtt_options);
-
+Vue.use(VueAxios, axios)
 Vue.use(VueCookies)
+
 Vue.config.productionTip = false
 
 new Vue({
