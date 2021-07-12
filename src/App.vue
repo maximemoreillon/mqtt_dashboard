@@ -37,7 +37,7 @@ export default {
 
   data: () => ({
     options: {
-      title: "IoT device manager",
+      title: "IoT Dashboard",
       authenticate: true,
       skip_greetings: true,
       login_url: `${process.env.VUE_APP_USER_MANAGER_API_URL}/auth/login`,
