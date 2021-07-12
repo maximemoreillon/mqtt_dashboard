@@ -4,6 +4,5 @@ module.exports = {
   ],
   pwa: {
     name: 'IoT Dashboard',
-    themeColor: '#c00000',
   }
 }
