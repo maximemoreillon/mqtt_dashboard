@@ -1,5 +1,5 @@
 {
-  "name": "mqtt_dashboard",
+  "name": "IoT Dashboard",
   "version": "0.1.0",
   "private": true,
   "scripts": {
