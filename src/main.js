@@ -5,9 +5,8 @@ import store from './store'
 import vuetify from './plugins/vuetify'
 import VueMqtt from 'vue-mqtt'
 import VueCookies from 'vue-cookies'
+import './registerServiceWorker'
 
-
-// const MQTT_BROKER_URL = process.env.VUE_APP_MQTT_BROKER_URL
 const mqtt_options = {
   username: '',
   password: '',
