@@ -7,6 +7,7 @@ import VueMqtt from 'vue-mqtt'
 import VueCookies from 'vue-cookies'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
+import './registerServiceWorker'
 
 const mqtt_options = { username: '', password: ''}
 Vue.use(VueMqtt, process.env.VUE_APP_MQTT_BROKER_URL, mqtt_options);
