@@ -55,7 +55,9 @@ export default {
       this.mqtt_connect()
     },
     mqtt_connect(){
-      const jwt = this.$cookies.get('jwt')
+      //const jwt = this.$cookies.get('jwt')
+      const jwt = localStorage.jwt
+      if(!jwt) return
       this.$mqtt.options.username = jwt
       this.$mqtt.options.password = 'jwt'
     },
