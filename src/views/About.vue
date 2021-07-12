@@ -3,7 +3,7 @@
     <h1>IoT Dashboard</h1>
 
     <v-card-text>
-      <p>Authors: Daiki YAMADA, Maxime MOREILLON</p>
+      <p>Authors: Maxime MOREILLON</p>
       <v-data-table
         hide-default-footer
         :itemsPerPage="-1"

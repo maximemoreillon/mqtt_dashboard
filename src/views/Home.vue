@@ -26,10 +26,12 @@
     },
     data(){
       return {
-        devices: []
+        devices: [],
+        topic: null, // Topic in data because username gets destroyed on logoff
       }
     },
     mounted(){
+      this.topic = `/${this.username}/#`
       this.$mqtt.on('message', this.manage_message)
       this.mqtt_subscribe()
     },
@@ -70,7 +72,6 @@
 
       },
       mqtt_subscribe(){
-        // Todo: deal with view destruction
         this.$mqtt.subscribe(this.topic)
       },
       mqtt_unsubscribe(){
@@ -86,9 +87,6 @@
       username(){
         return this.$store.state.current_user.username
       },
-      topic(){
-        return `/${this.username}/#`
-      }
     }
 
   }
