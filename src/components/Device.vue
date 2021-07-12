@@ -1,27 +1,80 @@
 <template>
 
-  <v-card
-    class="my-4 lighten-4"
-    :class="{
-      'red': device.state === 'on',
-      'grey': device.state === 'disconnected'
-      }"
-    >
+  <v-card class="my-4 ">
 
-    <v-card-title>{{device.name}}</v-card-title>
-    <v-card-text>State: {{device.state}}</v-card-text>
-
-    <v-card-actions>
+    <v-toolbar flat>
+      <v-toolbar-title>{{device.name}}</v-toolbar-title>
       <v-spacer></v-spacer>
+
       <v-btn
-        @click="turn_off()">
-        Turn OFF
+        icon
+        @click="toggle()"
+        :color="device.state === 'on' ? '#c00000' : ''">
+        <v-icon>mdi-power</v-icon>
       </v-btn>
-      <v-btn
-        @click="turn_on()">
-        Turn ON
-      </v-btn>
-  </v-card-actions>
+
+
+      <v-menu offset-y>
+        <template v-slot:activator="{ on, attrs }">
+          <v-btn
+            icon
+            v-bind="attrs"
+            v-on="on">
+            <v-icon>mdi-dots-vertical</v-icon>
+          </v-btn>
+        </template>
+
+        <v-list dense>
+          <v-list-item>
+            <v-list-item-content>
+              <v-btn
+                text
+                @click="clear_retained_messages()">
+                <v-icon>mdi-delete</v-icon>
+                <span>Remove</span>
+              </v-btn>
+            </v-list-item-content>
+          </v-list-item>
+        </v-list>
+      </v-menu>
+
+    </v-toolbar>
+
+    <v-expansion-panels flat>
+      <v-expansion-panel>
+        <v-expansion-panel-header>
+          Device details
+        </v-expansion-panel-header>
+        <v-expansion-panel-content>
+          <v-list>
+            <v-list-item two-line>
+              <v-list-item-content>
+                <v-list-item-subtitle>Connected</v-list-item-subtitle>
+                <v-list-item-title>{{device.connected}}</v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
+            <v-list-item two-line>
+              <v-list-item-content>
+                <v-list-item-subtitle>State</v-list-item-subtitle>
+                <v-list-item-title>{{device.state}}</v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
+            <v-list-item two-line>
+              <v-list-item-content>
+                <v-list-item-subtitle>Type</v-list-item-subtitle>
+                <v-list-item-title>{{device.type || 'unknown'}}</v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
+            <v-list-item two-line>
+              <v-list-item-content>
+                <v-list-item-subtitle>Firmware version</v-list-item-subtitle>
+                <v-list-item-title>{{device.firmware_version || 'unknown'}}</v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
+          </v-list>
+        </v-expansion-panel-content>
+      </v-expansion-panel>
+    </v-expansion-panels>
 
 
   </v-card>
@@ -46,10 +99,32 @@
     },
     methods: {
       turn_on(){
-        this.$mqtt.publish(this.command_topic, 'on')
+        if(this.device.json){
+          this.$mqtt.publish(this.command_topic, JSON.stringify({state: 'on'}))
+        }
+        else {
+          this.$mqtt.publish(this.command_topic, 'on')
+        }
+
       },
       turn_off(){
-        this.$mqtt.publish(this.command_topic, 'off')
+        if(this.device.json){
+          this.$mqtt.publish(this.command_topic, JSON.stringify({state: 'off'}))
+        }
+        else {
+          this.$mqtt.publish(this.command_topic, 'off')
+        }
+
+      },
+      toggle(){
+        if(this.device.state === 'on') this.turn_off()
+        else this.turn_on()
+      },
+      clear_retained_messages(){
+        if(!confirm(`Remove device ${this.device.name}?`)) return
+        const options = { retain: true }
+        this.$mqtt.publish(this.status_topic, new ArrayBuffer(), options)
+        this.$emit('removed')
       }
     },
     computed: {
@@ -62,6 +137,7 @@
       status_topic(){
         return `/${this.username}/${this.device.name}/status`
       },
+
     }
 
   }

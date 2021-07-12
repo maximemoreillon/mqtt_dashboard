@@ -6,7 +6,8 @@
       <Device
         v-for="(device, index) in devices"
         :key="`device_${index}`"
-        :device="device"/>
+        :device="device"
+        @removed="remove_device(index)"/>
     </div>
 
 
@@ -38,10 +39,30 @@
     },
     methods: {
       manage_message(topic, message) {
-        const device = {
+
+        if(!topic.endsWith('/status')) return
+
+        let device = {
           name: topic.split('/')[2],
-          state: message.toString()
         }
+
+        try {
+          const message_json = JSON.parse(message.toString())
+          device = {
+            ...device,
+            ...message_json,
+            json: true,
+          }
+        }
+        catch (e) {
+          device = {
+            ...device,
+            state: message.toString(),
+            json: false,
+          }
+        }
+
+
 
         const found_device_index = this.devices.findIndex(existing_device => existing_device.name === device.name)
         if(found_device_index < 0) this.devices.push(device)
@@ -55,13 +76,11 @@
       mqtt_unsubscribe(){
         this.$mqtt.unsubscribe(this.topic)
       },
-
-      turn_on(){
-        this.$mqtt.publish('param/param/param/test', 'message')
-      },
-      turn_off(){
-
+      remove_device(device_index){
+        this.devices.splice(device_index,1)
       }
+
+
     },
     computed: {
       username(){

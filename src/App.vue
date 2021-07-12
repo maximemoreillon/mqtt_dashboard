@@ -56,8 +56,8 @@ export default {
     },
     mqtt_connect(){
       const jwt = this.$cookies.get('jwt')
-      this.$mqtt.options.username=jwt
-      this.$mqtt.options.password='jwt'
+      this.$mqtt.options.username = jwt
+      this.$mqtt.options.password = 'jwt'
     },
   }
 };
