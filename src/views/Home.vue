@@ -2,7 +2,43 @@
   <div class="">
     <h1>{{username}}'s devices</h1>
 
-    <div class="devices_wrapper mt-3">
+    <!-- $mqtt.connect not reactive enough it seems-->
+    <v-container
+      v-if="false"
+      class="mt-12">
+      <v-row justify="center">
+        <v-col class="text-center">
+          <v-progress-circular indeterminate/>
+        </v-col>
+      </v-row>
+      <v-row justify="center">
+        <v-col class="text-center">
+          <span>Connecting to MQTT</span>
+        </v-col>
+      </v-row>
+    </v-container>
+
+    <v-container
+      v-else-if="devices.length < 1"
+      class="mt-12">
+      <v-row justify="center">
+        <v-col class="text-center">
+          <v-progress-circular indeterminate/>
+        </v-col>
+      </v-row>
+      <v-row justify="center">
+        <v-col class="text-center">
+          <span>Waiting for devices</span>
+        </v-col>
+      </v-row>
+    </v-container>
+
+
+
+
+    <div
+      v-else
+      class="devices_wrapper mt-3">
       <Device
         v-for="(device, index) in devices"
         :key="`device_${index}`"
@@ -91,3 +127,9 @@
 
   }
 </script>
+
+<style>
+.debug{
+  outline: 1px solid red;
+}
+</style>

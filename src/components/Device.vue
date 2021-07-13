@@ -5,7 +5,7 @@
     class="my-4 ">
 
     <v-toolbar flat>
-      <v-toolbar-title>{{device.name}}</v-toolbar-title>
+      <v-toolbar-title>{{device.nickname || device.name}}</v-toolbar-title>
       <v-spacer></v-spacer>
 
 
@@ -54,6 +54,12 @@
         </v-expansion-panel-header>
         <v-expansion-panel-content>
           <v-list>
+            <v-list-item two-line>
+              <v-list-item-content>
+                <v-list-item-subtitle>Name</v-list-item-subtitle>
+                <v-list-item-title>{{device.name}}</v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
             <v-list-item two-line>
               <v-list-item-content>
                 <v-list-item-subtitle>Connected</v-list-item-subtitle>
