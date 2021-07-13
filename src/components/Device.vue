@@ -6,11 +6,16 @@
       <v-toolbar-title>{{device.name}}</v-toolbar-title>
       <v-spacer></v-spacer>
 
+
       <v-btn
         icon
+        :disabled="!device.connected"
         @click="toggle()"
         :color="device.state === 'on' ? '#c00000' : ''">
-        <v-icon>mdi-power</v-icon>
+
+        <v-icon v-if="device.connected">mdi-power</v-icon>
+        <v-icon v-else>mdi-wifi-off</v-icon>
+
       </v-btn>
 
 
