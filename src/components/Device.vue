@@ -1,6 +1,8 @@
 <template>
 
-  <v-card class="my-4 ">
+  <v-card
+    outlined
+    class="my-4 ">
 
     <v-toolbar flat>
       <v-toolbar-title>{{device.name}}</v-toolbar-title>
