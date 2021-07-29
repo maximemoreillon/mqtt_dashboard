@@ -68,6 +68,7 @@
     },
     mounted(){
       this.topic = `/${this.username}/#`
+      //this.topic = `/${this.username}/devices/#`
       this.$mqtt.on('message', this.manage_message)
       this.mqtt_subscribe()
     },
@@ -78,9 +79,12 @@
     methods: {
       manage_message(topic, message) {
 
+        // only deal with devices that provide their status
+
         if(!topic.endsWith('/status')) return
 
         let device = {
+          status_topic: topic,
           name: topic.split('/')[2],
         }
 

@@ -10,15 +10,24 @@
 
 
       <v-btn
+        v-if="device.connected && device.state"
         icon
         :disabled="!device.connected"
         @click="toggle()"
         :color="device.state === 'on' ? '#c00000' : ''">
-
-        <v-icon v-if="device.connected">mdi-power</v-icon>
-        <v-icon v-else>mdi-wifi-off</v-icon>
-
+        <v-icon>mdi-power</v-icon>
       </v-btn>
+
+      <v-btn
+        v-if="!device.connected"
+        icon
+        disabled>
+        <v-icon>mdi-wifi-off</v-icon>
+      </v-btn>
+
+
+
+
 
 
       <v-menu offset-y>
@@ -58,6 +67,18 @@
               <v-list-item-content>
                 <v-list-item-subtitle>Name</v-list-item-subtitle>
                 <v-list-item-title>{{device.name}}</v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
+            <v-list-item two-line>
+              <v-list-item-content>
+                <v-list-item-subtitle>Status topic</v-list-item-subtitle>
+                <v-list-item-title>{{device.status_topic}}</v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
+            <v-list-item two-line>
+              <v-list-item-content>
+                <v-list-item-subtitle>Command topic</v-list-item-subtitle>
+                <v-list-item-title>{{command_topic}}</v-list-item-title>
               </v-list-item-content>
             </v-list-item>
             <v-list-item two-line>
@@ -136,7 +157,7 @@
       clear_retained_messages(){
         if(!confirm(`Remove device ${this.device.name}?`)) return
         const options = { retain: true }
-        this.$mqtt.publish(this.status_topic, new ArrayBuffer(), options)
+        this.$mqtt.publish(this.device.status_topic, new ArrayBuffer(), options)
         this.$emit('removed')
       }
     },
@@ -145,10 +166,8 @@
         return this.$store.state.current_user.username
       },
       command_topic(){
-        return `/${this.username}/${this.device.name}/command`
-      },
-      status_topic(){
-        return `/${this.username}/${this.device.name}/status`
+        // not exactly elegant
+        return this.device.status_topic.replace('/status','/command')
       },
 
     }
