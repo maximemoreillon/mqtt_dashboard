@@ -2,11 +2,10 @@
   <div class="">
     <h1>{{username}}'s devices</h1>
 
-    <p>MQTT connected: {{!$mqtt.disconnected}}</p>
 
     <!-- $mqtt.connect not reactive enough it seems-->
     <v-container
-      v-if="false"
+      v-if="!$store.state.mqtt_connected"
       class="mt-12">
       <v-row justify="center">
         <v-col class="text-center">

@@ -7,6 +7,7 @@ export default new Vuex.Store({
   state: {
     current_user: null,
     devices: [],
+    mqtt_connected: false,
   },
   mutations: {
     set_current_user(state, user){
@@ -24,6 +25,9 @@ export default new Vuex.Store({
     remove_all_devices(state){
       console.log(`Deleting all devices`)
       state.devices.splice(0, state.devices.length)
+    },
+    set_mqtt_connected(state, connected){
+      state.mqtt_connected = connected
     }
   },
 

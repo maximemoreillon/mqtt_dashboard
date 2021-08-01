@@ -50,18 +50,17 @@ export default {
     topic: null,
   }),
   mounted(){
-    console.log(`App mounted`)
 
     this.$mqtt.on('message', this.manage_message)
 
 
     this.$mqtt.on('connect', () => {
-      console.log(`MQTT connected, subscribing to ${this.topic}`)
+      this.$store.commit('set_mqtt_connected', true)
       this.$mqtt.subscribe(this.topic)
 
     })
-    this.$mqtt.on('close', (error) => {
-      console.log(`MQTT disconnected: ${error}`)
+    this.$mqtt.on('close', () => {
+      this.$store.commit('set_mqtt_connected', false)
     })
 
 
@@ -69,7 +68,6 @@ export default {
 
   },
   beforeDestroy() {
-    console.log('App Destroyed')
     this.$mqtt.removeAllListeners('message')
     this.$mqtt.removeAllListeners('connect')
     this.$mqtt.removeAllListeners('close')
@@ -85,17 +83,14 @@ export default {
       this.$mqtt.options.username = jwt || 'unknown'
       this.$mqtt.options.password = 'jwt'
 
-      console.log(`User changed, ending MQTT`)
       this.$mqtt.end(true)
 
       if(jwt) {
-        console.log(`User ${this.username} logged in`)
         this.topic = `/${this.username}/#`
         this.$mqtt.reconnect()
       }
 
       if(!jwt) {
-        console.log(`User logged out, unsub ${this.topic}`)
         this.$mqtt.unsubscribe(this.topic)
         this.topic = null
         this.$store.commit('remove_all_devices')
@@ -110,7 +105,6 @@ export default {
       if(!topic.endsWith('/status')) return
       if(!topic.startsWith(`/${this.username}`)) return
 
-      console.log(`Message arrived ${topic}`)
 
       let device = {
         status_topic: topic,
