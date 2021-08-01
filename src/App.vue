@@ -53,23 +53,17 @@ export default {
   }),
   mounted(){
     mqtt_client.on('connect', () => {
-      console.log('MQTT CONNECTED')
       this.$store.commit('set_mqtt_connected', true)
       if(this.topic) mqtt_client.subscribe(this.topic)
 
     })
     mqtt_client.on('error', () => {
-      console.log('MQTT ERROR')
       this.$store.commit('set_mqtt_connected', false)
     })
     mqtt_client.on('close', () => {
-      console.log('MQTT CLOSE')
       this.$store.commit('set_mqtt_connected', false)
     })
     mqtt_client.on('message', this.handle_mqtt_messages)
-
-
-
 
   },
   beforeDestroy() {
@@ -99,9 +93,6 @@ export default {
         this.topic = null
         this.$store.commit('remove_all_devices')
       }
-
-
-
 
     },
     handle_mqtt_messages(topic, message){

@@ -23,7 +23,6 @@ export default new Vuex.Store({
       state.devices.splice(device_index,1)
     },
     remove_all_devices(state){
-      console.log(`Deleting all devices`)
       state.devices.splice(0, state.devices.length)
     },
     set_mqtt_connected(state, connected){
