@@ -117,60 +117,53 @@
 </template>
 
 <script>
+import mqtt_client from '@/mqtt_client.js'
 
-  export default {
-    name: 'Home',
-    props: {
-      device: Object
-    },
-    components: {
-    },
-    data(){
-      return {
-      }
-    },
-    mounted(){
-    },
-    methods: {
-      turn_on(){
-        if(this.device.json){
-          this.$mqtt.publish(this.command_topic, JSON.stringify({state: 'on'}))
-        }
-        else {
-          this.$mqtt.publish(this.command_topic, 'on')
-        }
-
-      },
-      turn_off(){
-        if(this.device.json){
-          this.$mqtt.publish(this.command_topic, JSON.stringify({state: 'off'}))
-        }
-        else {
-          this.$mqtt.publish(this.command_topic, 'off')
-        }
-
-      },
-      toggle(){
-        if(this.device.state === 'on') this.turn_off()
-        else this.turn_on()
-      },
-      clear_retained_messages(){
-        if(!confirm(`Remove device ${this.device.name}?`)) return
-        const options = { retain: true }
-        this.$mqtt.publish(this.device.status_topic, new ArrayBuffer(), options)
-        this.$emit('removed')
-      }
-    },
-    computed: {
-      username(){
-        return this.$store.state.current_user.username
-      },
-      command_topic(){
-        // not exactly elegant
-        return this.device.status_topic.replace('/status','/command')
-      },
-
+export default {
+  name: 'Home',
+  props: {
+    device: Object
+  },
+  components: {
+  },
+  data(){
+    return {
     }
+  },
+  mounted(){
+  },
+  methods: {
+    turn_on(){
+      if(this.device.json) mqtt_client.publish(this.command_topic, JSON.stringify({state: 'on'}))
+      else mqtt_client.publish(this.command_topic, 'on')
+
+    },
+    turn_off(){
+      if(this.device.json) mqtt_client.publish(this.command_topic, JSON.stringify({state: 'off'}))
+      else mqtt_client.publish(this.command_topic, 'off')
+
+    },
+    toggle(){
+      if(this.device.state === 'on') this.turn_off()
+      else this.turn_on()
+    },
+    clear_retained_messages(){
+      if(!confirm(`Remove device ${this.device.name}?`)) return
+      const options = { retain: true }
+      mqtt_client.publish(this.device.status_topic, new ArrayBuffer(), options)
+      this.$emit('removed')
+    }
+  },
+  computed: {
+    username(){
+      return this.$store.state.current_user.username
+    },
+    command_topic(){
+      // not exactly elegant
+      return this.device.status_topic.replace('/status','/command')
+    },
 
   }
+
+}
 </script>
