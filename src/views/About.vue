@@ -69,23 +69,7 @@ export default {
 </script>
 
 <style scoped>
-table {
-  width: 100%;
-  border-collapse: collapse;
-  table-layout: fixed;
 
-}
-
-tr:not(:last-child) {
-  border-bottom: 1px solid #dddddd;
-}
-
-th {
-  text-align: left;
-}
-td {
-  padding: 0.25em;
-}
 
 
 </style>
