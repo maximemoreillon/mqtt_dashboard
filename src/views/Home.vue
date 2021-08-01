@@ -2,6 +2,8 @@
   <div class="">
     <h1>{{username}}'s devices</h1>
 
+    <p>MQTT connected: {{!$mqtt.disconnected}}</p>
+
     <!-- $mqtt.connect not reactive enough it seems-->
     <v-container
       v-if="false"
@@ -19,7 +21,7 @@
     </v-container>
 
     <v-container
-      v-else-if="devices.length < 1"
+      v-else-if="$store.state.devices.length < 1"
       class="mt-12">
       <v-row justify="center">
         <v-col class="text-center">
@@ -40,7 +42,7 @@
       v-else
       class="devices_wrapper mt-3">
       <Device
-        v-for="(device, index) in devices"
+        v-for="(device, index) in $store.state.devices"
         :key="`device_${index}`"
         :device="device"
         @removed="remove_device(index)"/>
@@ -62,66 +64,13 @@
     },
     data(){
       return {
-        devices: [],
-        topic: null, // Topic in data because username gets destroyed on logoff
       }
     },
-    mounted(){
-      this.topic = `/${this.username}/#`
-      //this.topic = `/${this.username}/devices/#`
-      this.$mqtt.on('message', this.manage_message)
-      this.mqtt_subscribe()
-    },
-    beforeDestroy() {
-      this.mqtt_unsubscribe()
-      this.$mqtt.removeAllListeners('message')
-    },
+
     methods: {
-      manage_message(topic, message) {
-
-        // only deal with devices that provide their status
-
-        if(!topic.endsWith('/status')) return
-
-        let device = {
-          status_topic: topic,
-          name: topic.split('/')[2],
-        }
-
-        try {
-          const message_json = JSON.parse(message.toString())
-          device = {
-            ...device,
-            ...message_json,
-            json: true,
-          }
-        }
-        catch (e) {
-          device = {
-            ...device,
-            state: message.toString(),
-            json: false,
-          }
-        }
-
-
-
-        const found_device_index = this.devices.findIndex(existing_device => existing_device.name === device.name)
-        if(found_device_index < 0) this.devices.push(device)
-        else this.$set(this.devices,found_device_index,device)
-
-      },
-      mqtt_subscribe(){
-        this.$mqtt.subscribe(this.topic)
-      },
-      mqtt_unsubscribe(){
-        this.$mqtt.unsubscribe(this.topic)
-      },
       remove_device(device_index){
-        this.devices.splice(device_index,1)
+        this.$store.commit('remove_device', device_index)
       }
-
-
     },
     computed: {
       username(){
@@ -131,9 +80,3 @@
 
   }
 </script>
-
-<style>
-.debug{
-  outline: 1px solid red;
-}
-</style>

@@ -9,7 +9,12 @@ import axios from 'axios'
 import VueAxios from 'vue-axios'
 import './registerServiceWorker'
 
-const mqtt_options = { username: '', password: ''}
+// Options will be set once the app receives uuer info
+const mqtt_options = {
+  username: localStorage.jwt || 'unknown',
+  password: 'jwt',
+}
+
 Vue.use(VueMqtt, process.env.VUE_APP_MQTT_BROKER_URL, mqtt_options);
 Vue.use(VueAxios, axios)
 Vue.use(VueCookies)
