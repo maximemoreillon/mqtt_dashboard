@@ -55,6 +55,7 @@
 
 <script>
   import Device from '@/components/Device.vue'
+
   export default {
     name: 'Home',
 
@@ -64,6 +65,9 @@
     data(){
       return {
       }
+    },
+    mounted(){
+      
     },
 
     methods: {

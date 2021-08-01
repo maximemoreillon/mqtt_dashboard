@@ -1,6 +1,6 @@
 {
   "name": "iot_dashboard",
-  "version": "0.2.1",
+  "version": "0.3.0",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
@@ -10,10 +10,10 @@
   "dependencies": {
     "@moreillon/vue_application_template_vuetify": "^0.3.4",
     "core-js": "^3.6.5",
+    "mqtt": "^4.2.8",
     "register-service-worker": "^1.7.1",
     "vue": "^2.6.11",
     "vue-cookies": "^1.7.4",
-    "vue-mqtt": "^2.0.3",
     "vue-router": "^3.2.0",
     "vuetify": "^2.4.0",
     "vuex": "^3.4.0"

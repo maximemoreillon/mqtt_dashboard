@@ -1,7 +1,7 @@
 <template>
   <AppTemplate
     :options="options"
-    @user="user_changed($event)">
+    @user="get_user($event)">
 
     <template v-slot:nav>
       <v-list
@@ -28,8 +28,6 @@
 
 <script>
 import AppTemplate from '@moreillon/vue_application_template_vuetify'
-import mqtt_client from '@/mqtt_client.js'
-
 export default {
   name: 'App',
 
@@ -52,62 +50,61 @@ export default {
     topic: null,
   }),
   mounted(){
-    mqtt_client.on('connect', () => {
-      console.log('MQTT CONNECTED')
+
+    this.$mqtt.on('message', this.manage_message)
+
+
+    this.$mqtt.on('connect', () => {
       this.$store.commit('set_mqtt_connected', true)
-      if(this.topic) mqtt_client.subscribe(this.topic)
+      this.$mqtt.subscribe(this.topic)
 
     })
-    mqtt_client.on('error', () => {
-      console.log('MQTT ERROR')
+    this.$mqtt.on('close', () => {
       this.$store.commit('set_mqtt_connected', false)
     })
-    mqtt_client.on('close', () => {
-      console.log('MQTT CLOSE')
-      this.$store.commit('set_mqtt_connected', false)
-    })
-    mqtt_client.on('message', this.handle_mqtt_messages)
 
 
 
 
   },
   beforeDestroy() {
-    mqtt_client.removeAllListeners('close')
-    mqtt_client.removeAllListeners('connect')
-    mqtt_client.removeAllListeners('message')
-    mqtt_client.removeAllListeners('error')
+    this.$mqtt.removeAllListeners('message')
+    this.$mqtt.removeAllListeners('connect')
+    this.$mqtt.removeAllListeners('close')
   },
 
   methods: {
-    user_changed(user){
+    get_user(user){
       this.$store.commit('set_current_user', user)
-
+      this.mqtt_connect()
+    },
+    mqtt_connect(){
       const jwt = localStorage.jwt
-      mqtt_client.options.username = jwt
-      mqtt_client.options.password = 'jwt'
+      this.$mqtt.options.username = jwt || 'unknown'
+      this.$mqtt.options.password = 'jwt'
 
-      mqtt_client.end(true)
+      this.$mqtt.end(true)
 
       if(jwt) {
         this.topic = `/${this.username}/#`
-        mqtt_client.reconnect()
+        this.$mqtt.reconnect()
       }
 
       if(!jwt) {
-        mqtt_client.unsubscribe(this.topic)
+        this.$mqtt.unsubscribe(this.topic)
         this.topic = null
         this.$store.commit('remove_all_devices')
       }
 
-
-
-
     },
-    handle_mqtt_messages(topic, message){
+    manage_message(topic, message) {
+
+      // only deal with devices that provide their status
+
 
       if(!topic.endsWith('/status')) return
       if(!topic.startsWith(`/${this.username}`)) return
+
 
       let device = {
         status_topic: topic,
@@ -134,8 +131,6 @@ export default {
       if(device_index < 0) this.$store.commit('add_device', device)
       else this.$store.commit('update_device',{device_index, device})
     },
-
-
   },
   computed: {
     username(){
