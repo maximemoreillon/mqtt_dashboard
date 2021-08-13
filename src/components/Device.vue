@@ -71,6 +71,14 @@
             </v-list-item>
             <v-list-item two-line>
               <v-list-item-content>
+                <v-list-item-subtitle>URL</v-list-item-subtitle>
+                <v-list-item-title>
+                  <a :href="this.device_url">{{this.device_url}}</a>
+                </v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
+            <v-list-item two-line>
+              <v-list-item-content>
                 <v-list-item-subtitle>Status topic</v-list-item-subtitle>
                 <v-list-item-title>{{device.status_topic}}</v-list-item-title>
               </v-list-item-content>
@@ -136,12 +144,10 @@ export default {
     turn_on(){
       if(this.device.json) mqtt_client.publish(this.command_topic, JSON.stringify({state: 'on'}))
       else mqtt_client.publish(this.command_topic, 'on')
-
     },
     turn_off(){
       if(this.device.json) mqtt_client.publish(this.command_topic, JSON.stringify({state: 'off'}))
       else mqtt_client.publish(this.command_topic, 'off')
-
     },
     toggle(){
       if(this.device.state === 'on') this.turn_off()
@@ -151,7 +157,7 @@ export default {
       if(!confirm(`Remove device ${this.device.name}?`)) return
       const options = { retain: true }
       mqtt_client.publish(this.device.status_topic, new ArrayBuffer(), options)
-      this.$emit('removed')
+      this.$store.commit('remove_device', this.device)
     }
   },
   computed: {
@@ -162,7 +168,9 @@ export default {
       // not exactly elegant
       return this.device.status_topic.replace('/status','/command')
     },
-
+    device_url() {
+      return `http://${this.device.name}.lan`
+    }
   }
 
 }

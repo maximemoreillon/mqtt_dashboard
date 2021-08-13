@@ -85,6 +85,7 @@ export default {
 
       if(jwt) {
         this.topic = `/${this.username}/#`
+        //this.topic = `/#`
         mqtt_client.reconnect()
       }
 

@@ -19,7 +19,9 @@ export default new Vuex.Store({
     update_device(state, {device_index, device}){
       Vue.set(state.devices,device_index,device)
     },
-    remove_device(state, device_index){
+    remove_device(state, {name}){
+      const device_index = state.devices.findIndex(device => device.name === name)
+      if(device_index === -1) return
       state.devices.splice(device_index,1)
     },
     remove_all_devices(state){

@@ -67,13 +67,11 @@
       }
     },
     mounted(){
-      
+
     },
 
     methods: {
-      remove_device(device_index){
-        this.$store.commit('remove_device', device_index)
-      }
+
     },
     computed: {
       username(){
