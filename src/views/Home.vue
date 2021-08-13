@@ -58,21 +58,14 @@
 
   export default {
     name: 'Home',
-
     components: {
       Device
     },
     data(){
-      return {
-      }
+      return {}
     },
-    mounted(){
-
-    },
-
-    methods: {
-
-    },
+    mounted(){},
+    methods: {},
     computed: {
       username(){
         return this.$store.state.current_user.username

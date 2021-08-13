@@ -100,10 +100,11 @@ export default {
 
       if(!topic.endsWith('/status')) return
       if(!topic.startsWith(`/${this.username}`)) return
+      if(!message.toString()) return // When device removed, an empty payload gets emitted
 
       let device = {
         status_topic: topic,
-        name: topic.split('/')[2],
+        name: topic.split('/')[2], // Inelegant
       }
 
       try {
