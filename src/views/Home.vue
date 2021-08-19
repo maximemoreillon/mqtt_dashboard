@@ -34,19 +34,14 @@
       </v-row>
     </v-container>
 
-
-
-
     <div
       v-else
       class="devices_wrapper mt-3">
       <Device
         v-for="(device, index) in $store.state.devices"
         :key="`device_${index}`"
-        :device="device"
-        @removed="remove_device(index)"/>
+        :device="device"/>
     </div>
-
 
 
   </div>

@@ -169,7 +169,8 @@ export default {
       return this.device.status_topic.replace('/status','/command')
     },
     device_url() {
-      return `http://${this.device.name}.lan`
+      if(this.device.address) return `http://${this.device.address}`
+      else return `http://${this.device.name}.lan`
     }
   }
 
