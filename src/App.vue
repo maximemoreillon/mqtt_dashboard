@@ -77,7 +77,9 @@ export default {
     user_changed(user){
       this.$store.commit('set_current_user', user)
 
-      const jwt = localStorage.jwt
+      const jwt = localStorage.jwt || this.$cookie.get('jwt')
+
+
       mqtt_client.options.username = jwt
       mqtt_client.options.password = 'jwt'
 
