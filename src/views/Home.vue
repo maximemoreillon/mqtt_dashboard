@@ -1,6 +1,8 @@
 <template>
-  <div class="">
-    <h1>{{username}}'s devices</h1>
+  <v-card>
+
+    <v-card-title>{{username}}'s devices</v-card-title>
+
 
 
     <!-- $mqtt.connect not reactive enough it seems-->
@@ -34,17 +36,17 @@
       </v-row>
     </v-container>
 
-    <div
+    <v-card-text
       v-else
       class="devices_wrapper mt-3">
       <Device
         v-for="(device, index) in $store.state.devices"
         :key="`device_${index}`"
         :device="device"/>
-    </div>
+    </v-card-text>
 
 
-  </div>
+  </v-card>
 
 </template>
 
@@ -63,7 +65,9 @@
     methods: {},
     computed: {
       username(){
-        return this.$store.state.current_user.username
+        const current_user = this.$store.state.current_user
+        return current_user.display_name
+          || current_user.username
       },
     }
 

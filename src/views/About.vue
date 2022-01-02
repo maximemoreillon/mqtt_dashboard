@@ -1,9 +1,9 @@
 <template>
-  <div>
-    <h1>IoT Dashboard</h1>
+  <v-card>
+    <v-card-title>IoT Dashboard</v-card-title>
 
     <v-card-text>
-      <p>Authors: Maxime MOREILLON</p>
+      <p>Developed and maintainted by <a href="https://maximemoreillon.com">Maxime MOREILLON</a></p>
       <v-data-table
         disable-sort
         hide-default-footer
@@ -13,7 +13,7 @@
     </v-card-text>
 
 
-  </div>
+  </v-card>
 </template>
 
 <script>

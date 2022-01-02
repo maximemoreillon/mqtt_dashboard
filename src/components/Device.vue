@@ -71,9 +71,20 @@
             </v-list-item>
             <v-list-item two-line>
               <v-list-item-content>
-                <v-list-item-subtitle>URL</v-list-item-subtitle>
+                <v-list-item-subtitle>Type</v-list-item-subtitle>
+                <v-list-item-title>{{device.type || 'unknown'}}</v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
+            <v-list-item two-line>
+              <v-list-item-content>
+                <v-list-item-subtitle>Address</v-list-item-subtitle>
                 <v-list-item-title>
-                  <a :href="this.device_url">{{this.device_url}}</a>
+                  <a
+                    v-if="this.device.address"
+                    :href="this.device.address">
+                    {{this.device.address}}
+                  </a>
+                  <span v-else>Unknown</span>
                 </v-list-item-title>
               </v-list-item-content>
             </v-list-item>
@@ -101,16 +112,17 @@
                 <v-list-item-title>{{device.state}}</v-list-item-title>
               </v-list-item-content>
             </v-list-item>
-            <v-list-item two-line>
-              <v-list-item-content>
-                <v-list-item-subtitle>Type</v-list-item-subtitle>
-                <v-list-item-title>{{device.type || 'unknown'}}</v-list-item-title>
-              </v-list-item-content>
-            </v-list-item>
+
             <v-list-item two-line>
               <v-list-item-content>
                 <v-list-item-subtitle>Firmware version</v-list-item-subtitle>
-                <v-list-item-title>{{device.firmware_version || 'unknown'}}</v-list-item-title>
+                <v-list-item-title>
+                  {{
+                    device.firmware_version
+                    || device.version
+                    || 'unknown'
+                  }}
+                </v-list-item-title>
               </v-list-item-content>
             </v-list-item>
           </v-list>
@@ -168,10 +180,6 @@ export default {
       // not exactly elegant
       return this.device.status_topic.replace('/status','/command')
     },
-    device_url() {
-      if(this.device.address) return `http://${this.device.address}`
-      else return `http://${this.device.name}.lan`
-    }
   }
 
 }
