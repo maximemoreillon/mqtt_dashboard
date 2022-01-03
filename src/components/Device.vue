@@ -125,7 +125,37 @@
                 </v-list-item-title>
               </v-list-item-content>
             </v-list-item>
+
+            <v-list-item
+              two-line
+              v-if="device.type === 'ircontroller'">
+              <v-list-item-content>
+                <v-list-item-subtitle>IR signal recording</v-list-item-subtitle>
+                <v-row align="center">
+                  <v-col cols="auto">
+                    <v-btn
+                      @click="record('on')">
+                      Record ON
+                    </v-btn>
+                  </v-col>
+                  <v-col cols="auto">
+                    <v-btn
+                      @click="record('off')">
+                      Record OFF
+                    </v-btn>
+                  </v-col>
+                  <v-spacer/>
+                </v-row>
+
+
+
+
+              </v-list-item-content>
+            </v-list-item>
           </v-list>
+
+
+
         </v-expansion-panel-content>
       </v-expansion-panel>
     </v-expansion-panels>
@@ -160,6 +190,9 @@ export default {
     turn_off(){
       if(this.device.json) mqtt_client.publish(this.command_topic, JSON.stringify({state: 'off'}))
       else mqtt_client.publish(this.command_topic, 'off')
+    },
+    record(signal){
+      mqtt_client.publish(this.command_topic, JSON.stringify({record: signal}))
     },
     toggle(){
       if(this.device.state === 'on') this.turn_off()
