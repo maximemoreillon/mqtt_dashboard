@@ -81,8 +81,8 @@
                 <v-list-item-title>
                   <a
                     v-if="this.device.address"
-                    :href="this.device.address">
-                    {{this.device.address}}
+                    :href="`http://${this.device.address}`">
+                    http://{{this.device.address}}
                   </a>
                   <span v-else>Unknown</span>
                 </v-list-item-title>
