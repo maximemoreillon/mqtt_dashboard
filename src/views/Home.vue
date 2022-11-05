@@ -1,5 +1,5 @@
 <template>
-  <v-card>
+  <v-card max-width="60rem" class="mx-auto">
 
     <v-card-title>{{username}}'s devices</v-card-title>
 
@@ -36,13 +36,12 @@
       </v-row>
     </v-container>
 
-    <v-card-text
-      v-else
-      class="devices_wrapper mt-3">
-      <Device
-        v-for="(device, index) in $store.state.devices"
-        :key="`device_${index}`"
-        :device="device"/>
+    <v-card-text v-else>
+      <v-row v-for="(device, index) in $store.state.devices" :key="`device_${index}`" dense>
+        <v-col cols="12">
+          <Device   :device="device" />
+        </v-col>
+      </v-row>
     </v-card-text>
 
 

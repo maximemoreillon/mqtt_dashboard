@@ -6,7 +6,11 @@ const mqtt_options = {
   password: 'jwt',
 }
 
-const mqtt_client = mqtt.connect(process.env.VUE_APP_MQTT_BROKER_URL, mqtt_options)
+const {
+  VUE_APP_MQTT_BROKER_URL
+} = process.env
+
+const mqtt_client = mqtt.connect(VUE_APP_MQTT_BROKER_URL, mqtt_options)
 
 
 export default mqtt_client
