@@ -35,20 +35,20 @@ export default {
 
       headers: [
         { text: "Setting", value: "name" },
-        { text: "URL", value: "url" },
+        { text: "Value", value: "value" },
       ],
       services: [
         {
           name: "Login URL",
-          url: VUE_APP_LOGIN_URL,
+          value: VUE_APP_LOGIN_URL,
         },
         {
           name: "User identification URL",
-          url: VUE_APP_IDENTIFICATION_URL,
+          value: VUE_APP_IDENTIFICATION_URL,
         },
         {
           name: "MQTT Broker URL",
-          url: VUE_APP_MQTT_BROKER_URL,
+          value: VUE_APP_MQTT_BROKER_URL,
         },
       ],
     }
