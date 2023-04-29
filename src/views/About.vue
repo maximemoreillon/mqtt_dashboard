@@ -1,75 +1,59 @@
 <template>
   <v-card>
     <v-card-title>IoT Dashboard</v-card-title>
+    <v-card-subtitle> v{{ version }} </v-card-subtitle>
 
     <v-card-text>
-      <p>Developed and maintainted by <a href="https://maximemoreillon.com">Maxime MOREILLON</a></p>
+      <p>
+        Developed and maintainted by
+        <a href="https://maximemoreillon.com">Maxime MOREILLON</a>
+      </p>
       <v-data-table
         disable-sort
         hide-default-footer
         :itemsPerPage="-1"
         :headers="headers"
-        :items="services"/>
+        :items="services"
+      />
     </v-card-text>
-
-
   </v-card>
 </template>
 
 <script>
-import pjson from '@/../package.json'
+import { version } from "@/../package.json"
+const {
+  VUE_APP_LOGIN_URL,
+  VUE_APP_IDENTIFICATION_URL,
+  VUE_APP_MQTT_BROKER_URL,
+} = process.env
+
 export default {
-  name: 'About',
-  data () {
+  name: "About",
+  data() {
     return {
-      version: pjson.version,
+      version,
 
       headers: [
-        {text: 'Service', value: "name"},
-        {text: 'Version', value: "version"},
-        {text: 'URL', value: "url"},
-
+        { text: "Setting", value: "name" },
+        { text: "URL", value: "url" },
       ],
       services: [
         {
-          name: 'IoT Dashboard',
-          url: window.location.origin,
-          version: pjson.version
+          name: "Login URL",
+          url: VUE_APP_LOGIN_URL,
         },
         {
-          name: 'User manager API',
-          url: process.env.VUE_APP_USER_MANAGER_API_URL,
-          version: null
+          name: "User identification URL",
+          url: VUE_APP_IDENTIFICATION_URL,
         },
         {
-          name: 'MQTT Broker URL',
-          url: process.env.VUE_APP_MQTT_BROKER_URL,
-          version: 'N/A'
+          name: "MQTT Broker URL",
+          url: VUE_APP_MQTT_BROKER_URL,
         },
       ],
     }
   },
-  mounted () {
-    this.get_services_version()
-  },
-  methods: {
-
-    get_services_version () {
-      this.services.forEach((service) => {
-        if (service.version) return
-        service.version = 'Connecting...'
-        this.axios.get(service.url)
-          .then(({ data }) => { service.version = data.version })
-          .catch(() => { service.version = 'Unable to connect' })
-      })
-    }
-  }
-
 }
 </script>
 
-<style scoped>
-
-
-
-</style>
+<style scoped></style>
