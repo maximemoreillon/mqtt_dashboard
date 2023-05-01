@@ -6,12 +6,11 @@ variables:
   APPLICATION_NAME: mqtt-dashobard
   CONTAINER_IMAGE: ${DOCKER_HUB_USERNAME}/${APPLICATION_NAME}
   CONTAINER_IMAGE_TAGGED: ${CONTAINER_IMAGE}:${CI_COMMIT_SHORT_SHA}
-  CERTIFICATE_DOMAIN: dashboard.iot.maximemoreillon.com
+  K8S_INGRESS_HOST: dashboard.iot.maximemoreillon.com
 
 image: moreillon/ci-dind
 services:
   - name: docker:19.03.12-dind
-
 
 build:
   stage: build
